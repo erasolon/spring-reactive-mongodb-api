@@ -12,9 +12,12 @@ import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import static org.springframework.data.mongodb.core.query.Criteria.where;
+import static org.springframework.data.mongodb.core.query.Query.query;
+
 @Repository
 @RequiredArgsConstructor
-public class PostRepositoryImpl implements PostRepository{
+public class PostRepositoryImpl implements PostRepository {
 
     Log log = LogFactory.getLog(PostRepositoryImpl.class);
 
@@ -72,7 +75,7 @@ public class PostRepositoryImpl implements PostRepository{
 
     @Override
     public <S extends Post> Flux<S> saveAll(Iterable<S> iterable) {
-        return null;
+        return Flux.fromIterable(iterable).flatMap(template::save);
     }
 
     @Override
@@ -81,8 +84,8 @@ public class PostRepositoryImpl implements PostRepository{
     }
 
     @Override
-    public Mono<Post> findById(String s) {
-        return null;
+    public Mono<Post> findById(String id) {
+        return template.findById(id, Post.class);
     }
 
     @Override
@@ -121,9 +124,12 @@ public class PostRepositoryImpl implements PostRepository{
     }
 
     @Override
-    public Mono<Void> deleteById(String s) {
-        return null;
+    public Mono<Void> deleteById(String id) {
+        //return template.remove(query(where("id").is(id)), Post.class).map(DeleteResult::getDeletedCount);
+        return template.remove(query(where("id").is(id)), Post.class).then();
     }
+
+
 
     @Override
     public Mono<Void> deleteById(Publisher<String> publisher) {
@@ -142,7 +148,8 @@ public class PostRepositoryImpl implements PostRepository{
 
     @Override
     public Mono<Void> deleteAll(Iterable<? extends Post> iterable) {
-        return null;
+        //return template.remove(Post.class).all().map(DeleteResult::getDeletedCount);
+        return template.remove(Post.class).all().then();
     }
 
     @Override
