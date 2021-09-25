@@ -1,8 +1,11 @@
 package com.erasolon.documents;
 
 import lombok.*;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.time.LocalDateTime;
 
 @Document
 @Data
@@ -13,8 +16,13 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Post {
 
     @Id
-    private String id;
-    private String title;
-    private String content;
+    private ObjectId id;
+    @NonNull
+    private String username;
+    @NonNull
+    private String topic;
+    private LocalDateTime time = LocalDateTime.now();
+    @NonNull
+    private String message;
 
 }

@@ -2,6 +2,7 @@ package com.erasolon.services;
 
 import com.erasolon.documents.Post;
 import com.erasolon.repositories.PostRepository;
+import io.netty.util.concurrent.Promise;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
-    public Mono<Post> save(Post post) {
+    public Mono<Post> save(Post post){
         return this.postRepository.save(post);
     }
 }
