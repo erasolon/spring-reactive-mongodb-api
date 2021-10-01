@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.Date;
+
 @Service
 public class PostServiceImpl implements PostService{
 
@@ -30,5 +32,10 @@ public class PostServiceImpl implements PostService{
     @Override
     public Mono<Post> save(Post post){
         return this.postRepository.save(post);
+    }
+
+    @Override
+    public Flux<Post> findPostsByTime(Date dt) {
+        return this.postRepository.findPostsByTime(dt);
     }
 }

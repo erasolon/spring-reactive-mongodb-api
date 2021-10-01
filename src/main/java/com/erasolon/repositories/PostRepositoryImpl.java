@@ -4,6 +4,7 @@ import com.erasolon.documents.Post;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.bson.types.ObjectId;
 import org.reactivestreams.Publisher;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Sort;
@@ -11,6 +12,8 @@ import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.util.Date;
 
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 import static org.springframework.data.mongodb.core.query.Query.query;
@@ -125,8 +128,7 @@ public class PostRepositoryImpl implements PostRepository {
 
     @Override
     public Mono<Void> deleteById(String id) {
-        //return template.remove(query(where("id").is(id)), Post.class).map(DeleteResult::getDeletedCount);
-        return template.remove(query(where("id").is(id)), Post.class).then();
+         return template.remove(query(where("id").is(id)), Post.class).then();
     }
 
 
@@ -160,5 +162,10 @@ public class PostRepositoryImpl implements PostRepository {
     @Override
     public Mono<Void> deleteAll() {
         return null;
+    }
+
+    @Override
+    public Flux<Post> findPostsByTime(Date dt) {
+        return template.find(query(where("time").gt(Date.from(dt.toInstant().plusSeconds(1)))), Post.class);
     }
 }
